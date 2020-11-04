@@ -28,7 +28,8 @@ public class LinuxCommandRunner implements CommandRunner {
 			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
 				if (line.contains("Sorry")) {
-					writer.write(password + "\n");
+					writer.write(password);
+					writer.newLine();
 					writer.flush();
 				}
 			}
