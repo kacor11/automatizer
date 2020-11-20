@@ -44,10 +44,18 @@
 		</dependency>
 		
 		<dependency>
-  			<groupId>com.hierynomus</groupId>
-  			<artifactId>sshj</artifactId>
-  			<version>0.30.0</version>
+    		<groupId>io.vavr</groupId>
+    		<artifactId>vavr</artifactId>
+    		<version>0.10.3</version>
 		</dependency>
+		
+		    <dependency>
+        		<groupId>org.projectlombok</groupId>
+        		<artifactId>lombok</artifactId>
+        		<version>1.18.16</version>
+        		<scope>provided</scope>
+    		</dependency>
+
 
 	</dependencies>
 
