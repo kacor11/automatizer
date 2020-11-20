@@ -1,4 +1,4 @@
-package pl.kocjan.automatizer.Host;
+package pl.kocjan.automatizer.host;
 
 public class Host {
 	private String ip;

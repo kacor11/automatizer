@@ -14,7 +14,7 @@ public class LinuxCommandRunner implements CommandRunner {
 	@Override
 	public void createUser(String name, String password) throws IOException, InterruptedException {
 		
-        ProcessBuilder pb = new ProcessBuilder("sudo", "-S", "useradd", name);
+        ProcessBuilder pb = new ProcessBuilder("ssh-copy-id", "kacor11@localhost");
         pb.redirectErrorStream(true);		
 		Process process = pb.start();
 		
