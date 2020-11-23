@@ -1,4 +1,4 @@
-package pl.kocjan.automatizer.Host.dto;
+package pl.kocjan.automatizer.domain.host.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,5 +8,7 @@ import lombok.Getter;
 public class CreateHostDto {
 	private String ip;
 	private int port;
+	private String username;
+	private String password;
 	
 }

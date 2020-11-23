@@ -1,4 +1,4 @@
-package pl.kocjan.automatizer.host;
+package pl.kocjan.automatizer.domain.host;
 
 import lombok.Builder;
 import lombok.Getter;
