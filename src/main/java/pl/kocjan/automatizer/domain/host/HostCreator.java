@@ -1,4 +1,4 @@
-package pl.kocjan.automatizer.domain.common;
+package pl.kocjan.automatizer.domain.host;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;

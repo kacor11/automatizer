@@ -7,11 +7,11 @@ import pl.kocjan.automatizer.domain.common.vavr.Error;
 public enum HostError implements Error {
 	HOST_ALREADY_EXISTS("Host with this addres already exists");
 	
+	
 	private final String error;
-
 	
 	@Override
-	public String getCause() {		
+	public String getError() {		
 		return this.error;
 	}
 
