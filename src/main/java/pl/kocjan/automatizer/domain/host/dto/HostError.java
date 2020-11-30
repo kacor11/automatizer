@@ -5,7 +5,8 @@ import pl.kocjan.automatizer.domain.common.vavr.Error;
 
 @AllArgsConstructor
 public enum HostError implements Error {
-	HOST_ALREADY_EXISTS("Host with this addres already exists");
+	HOST_ALREADY_EXISTS("Host with this addres already exists"),
+	ESTABLISHING_CONNECTION_FAILED("Can't establish connection with specific host");
 	
 	
 	private final String error;

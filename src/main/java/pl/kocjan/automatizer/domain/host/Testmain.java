@@ -1,25 +1,17 @@
 package pl.kocjan.automatizer.domain.host;
 
-import java.net.InetSocketAddress;
-import java.net.Socket;
-
-import io.vavr.control.Try;
+import pl.kocjan.automatizer.domain.common.LocalCommandRunner;
 
 public class Testmain {
 
 	public static void main(String[] args) {
-		System.out.println(checkHostAvailability("asdfghj", 22, 1000));
+		LocalCommandRunner cr = new LocalCommandRunner();
+		HostCreator hc = new HostCreator(null, cr);
+		
+		int result = hc.registerServerKeyOnHost("7675277", "kacor11", "localhost");
+		
+		System.out.println("result is " + result);
 
 	}
 	
-	private static boolean checkHostAvailability(String ip, int port, int timeout) {
-		
-		return Try.withResources(() -> new Socket())
-			.of(socket -> {
-				socket.connect(new InetSocketAddress(ip, port), timeout);
-				return true;
-			})
-			.isSuccess();
-	}
-
 }
