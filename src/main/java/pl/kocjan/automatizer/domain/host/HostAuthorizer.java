@@ -5,7 +5,4 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class HostAuthorizer {
 	
-	HostHealthChecker healthChecker;
-	
-	Either<Error, Success> authorizeHost
 }

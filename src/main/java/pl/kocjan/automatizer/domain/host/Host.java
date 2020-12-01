@@ -16,12 +16,13 @@ import pl.kocjan.automatizer.domain.host.dto.HostError;
 @Builder
 @Getter
 public class Host {
+	private Long id;
 	private String ip;
 	private int port;
 	private boolean isAuthorized;
 	private Set<String> groups;
 	
-	static Host createHost(CreateHostDto dto) {
+	static Host buildHost(CreateHostDto dto) {
 				return Host.builder()
 						.ip(dto.getIp())
 						.port(dto.getPort())

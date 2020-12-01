@@ -1,6 +1,7 @@
 package pl.kocjan.automatizer.common;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +30,7 @@ public class LocalCommandRunnerTest {
 		
 		
 		//then
+		assertTrue(result.isLeft());
 		assertEquals(result.getLeft(), CommandRunnerError.COMMAND_EXECUTION_ERROR);
 		
 	}
@@ -43,6 +45,7 @@ public class LocalCommandRunnerTest {
 		
 		
 		//then
-		assertEquals(result.getOrElseThrow(t -> new RuntimeException()), new Success());
+		assertTrue(result.isRight());
+		assertEquals(result.get(), new Success());
 	}
 }
