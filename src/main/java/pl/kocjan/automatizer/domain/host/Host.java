@@ -1,17 +1,10 @@
 package pl.kocjan.automatizer.domain.host;
 
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.Set;
 
-import io.vavr.control.Either;
-import io.vavr.control.Try;
 import lombok.Builder;
 import lombok.Getter;
-import pl.kocjan.automatizer.domain.common.vavr.Error;
-import pl.kocjan.automatizer.domain.common.vavr.Success;
 import pl.kocjan.automatizer.domain.host.dto.CreateHostDto;
-import pl.kocjan.automatizer.domain.host.dto.HostError;
 
 @Builder
 @Getter
