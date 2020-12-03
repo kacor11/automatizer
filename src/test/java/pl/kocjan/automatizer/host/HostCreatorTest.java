@@ -4,11 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pl.kocjan.automatizer.adapter.repository.inmemory.InMemoryHostRepository;
+import pl.kocjan.automatizer.domain.host.HostFacade;
 import pl.kocjan.automatizer.domain.host.port.HostRepository;
 
 public class HostCreatorTest {
 	
 	private HostRepository hostRepository = new InMemoryHostRepository();
+	private HostFacade hostFacade = new HostFacade(hostRepository);
 	
 	@Before
 	public void resetHostList() {
@@ -17,6 +19,6 @@ public class HostCreatorTest {
 	@Test
 	public void shouldCreateHost() {
 		//when
-		HostCreator hostCreator = new HostCreator();
+		
 	}
 }

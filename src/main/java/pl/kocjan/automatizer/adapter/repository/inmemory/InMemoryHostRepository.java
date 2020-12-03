@@ -22,8 +22,7 @@ public class InMemoryHostRepository implements HostRepository {
 
 	@Override
 	public Optional<HostDto> findHostByIp(String ip) {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(hosts.get(ip));
 	}
 
 }

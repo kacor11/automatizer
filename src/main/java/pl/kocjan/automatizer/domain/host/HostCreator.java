@@ -30,11 +30,11 @@ class HostCreator {
 	}
 	
 	private Either<Error, Success> saveHost(Host host) {
-		return Try.of(() -> save(host))
+		return Try.of(() -> saveHostInRepository(host))
 				.toEither(HostError.DATABASE_ERROR);
 	}
 	
-	private Success save(Host host) {
+	private Success saveHostInRepository(Host host) {
 		hostRepository.saveHost(hostMapper.hostToDto(host));
 		return new Success();
 	}
