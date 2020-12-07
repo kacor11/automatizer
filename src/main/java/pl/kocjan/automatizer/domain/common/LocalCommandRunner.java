@@ -4,17 +4,19 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import lombok.NoArgsConstructor;
 import pl.kocjan.automatizer.domain.common.dto.CommandRunnerError;
-import pl.kocjan.automatizer.domain.common.vavr.Success;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
+import pl.kocjan.automatizer.domain.common.vavr.Success;
 
 @NoArgsConstructor
 public class LocalCommandRunner {
 	
-	private static final Integer SUCCESS_EXIT_VALUE = 0;
+	private static final int SUCCESS_EXIT_VALUE = 0;
+	private static final int WRONG_PASSWORD_EXIT_VALUE = 5;
 	
 	
 	public String createSshCopyCommand(String password, String username, String ip) {
-		return "sshpass -p " + password + " ssh-copy-id " + username + "@" + ip;
+		System.out.println(password);
+		return "sshpass -p " + password + " ssh-copy-id -o StrictHostKeyChecking=no " + username + "@" + ip;
 	}
 	
 	
@@ -34,12 +36,18 @@ public class LocalCommandRunner {
 	}
 	
 	private Either<Error, Success> interpreteExitValue(Integer exitValue) {
-		//TODO add specific errors depending on the exit value
 		System.out.println(exitValue);
-		return exitValue == SUCCESS_EXIT_VALUE ? Either.right(new Success()) : 
-			Either.left(CommandRunnerError.COMMAND_EXECUTION_ERROR);
+		switch(exitValue) {
+		case SUCCESS_EXIT_VALUE:
+			return Either.right(new Success());
+			
+		case WRONG_PASSWORD_EXIT_VALUE:
+			return Either.left(CommandRunnerError.INCORRECT_SSH_PASSWORD);		
+		
+		default:
+			return Either.left(CommandRunnerError.COMMAND_EXECUTION_ERROR);	
+		}
 	}
-	
 	
 	
 

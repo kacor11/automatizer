@@ -8,5 +8,6 @@ import lombok.Getter;
 public class AuthorizeHostDto {
 	private String ip;
 	private String sshPassword;
-	private int port;
+	private String username;
+
 }

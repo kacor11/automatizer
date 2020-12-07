@@ -10,8 +10,6 @@ import lombok.Getter;
 public class CreateHostDto {
 	private String ip;
 	private String username;
-	private String password;
 	private int port;
 	private Set<String> groups;	
-	private boolean shouldRegister;
 }

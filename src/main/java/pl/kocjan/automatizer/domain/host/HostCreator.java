@@ -43,5 +43,6 @@ class HostCreator {
 		return hostRepository.findHostByIp(createHostDto.getIp()).isPresent() ? 
 				Optional.of(HostError.HOST_ALREADY_EXISTS) : Optional.empty();
 	}
+	
 }
 

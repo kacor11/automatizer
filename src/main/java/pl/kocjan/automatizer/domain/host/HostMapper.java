@@ -13,4 +13,15 @@ class HostMapper {
 				.groups(host.getGroups())
 				.build();
 	}
+	
+	Host dtoToHost(HostDto dto) {
+		return Host.builder()
+				.id(dto.getId())
+				.ip(dto.getIp())
+				.port(dto.getPort())
+				.isAuthorized(dto.isAuthorized())
+				.groups(dto.getGroups())
+				.build();
+		
+	}
 }

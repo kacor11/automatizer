@@ -24,7 +24,7 @@ public class HostFacade {
 		this.hostMapper = new HostMapper();
 		this.commandRunner = new LocalCommandRunner();
 		this.hostCreator = new HostCreator(hostRepository, hostMapper);
-		this.hostAuthorizer = new HostAuthorizer(hostRepository, commandRunner);
+		this.hostAuthorizer = new HostAuthorizer(hostRepository, commandRunner, hostMapper);
 	}
 	public Either<Error, Success> createHost(CreateHostDto dto) {
 		return hostCreator.createHost(dto);
@@ -37,4 +37,5 @@ public class HostFacade {
 	public Optional<HostDto> readHost(String ip) {
 		return hostReader.readHostByIp(ip);
 	}
+	
 }

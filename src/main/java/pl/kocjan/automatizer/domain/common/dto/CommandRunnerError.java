@@ -5,7 +5,8 @@ import pl.kocjan.automatizer.domain.common.vavr.Error;
 
 @AllArgsConstructor
 public enum CommandRunnerError implements Error {	
-	COMMAND_EXECUTION_ERROR("Can't execute specific command");
+	COMMAND_EXECUTION_ERROR("Can't execute specific command"),
+	INCORRECT_SSH_PASSWORD("Ssh password you provided is incorrect");
 	
 	private final String error;
 	
