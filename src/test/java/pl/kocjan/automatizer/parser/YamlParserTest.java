@@ -24,9 +24,7 @@ public class YamlParserTest {
 		
 		//when
 		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(validYamlFile);
-		
-		//then
-		
+		//then		
 		assertTrue(result.isRight());
 		assertEquals(VALID_HOST_GROUP_FROM_FILE, result.get().getHostGroup());	
 	}
@@ -40,8 +38,7 @@ public class YamlParserTest {
 		//when
 		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(invalidYamlFile);
 		
-		//then
-		
+		//then		
 		assertTrue(result.isLeft());
 	}
 }

@@ -41,6 +41,7 @@ public class HostAuthorizerTest {
 		assertEquals(result, Either.right(new Success()));
 		assertTrue(hostFacade.readHost(hostIp).get().isAuthorized());
 	}
+	
 	@Test
 	public void shouldFailWithInvalidSshPassword() {
 		//given
