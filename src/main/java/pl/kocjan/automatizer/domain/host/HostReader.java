@@ -1,5 +1,6 @@
 package pl.kocjan.automatizer.domain.host;
 
+import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -12,5 +13,9 @@ class HostReader {
 	
 	Optional<HostDto> readHostByIp(String ip) {
 		return hostRepository.findHostByIp(ip);
+	}
+	
+	Optional<List<HostDto>> getHostsWithGroup(String group) {
+		return hostRepository.findHostsByGroup(group);
 	}
 }

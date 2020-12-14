@@ -1,5 +1,6 @@
 package pl.kocjan.automatizer.domain.host;
 
+import java.util.List;
 import java.util.Optional;
 
 import io.vavr.control.Either;
@@ -36,6 +37,10 @@ public class HostFacade {
 	
 	public Optional<HostDto> readHost(String ip) {
 		return hostReader.readHostByIp(ip);
+	}
+	
+	public Optional<List<HostDto>> getHostsWithGroup(String group) {
+		return hostReader.getHostsWithGroup(group);
 	}
 	
 }
