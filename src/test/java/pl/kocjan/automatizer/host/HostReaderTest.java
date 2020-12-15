@@ -42,6 +42,7 @@ public class HostReaderTest {
 		Optional<List<HostDto>> result = hostFacade.getHostsWithGroup(groupName);
 		
 		//then
+
 		assertTrue(result.isPresent());
 		assertEquals(2, result.get().size());
 		assertEquals(correctIp, result.get().get(0).getIp());

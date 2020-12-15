@@ -16,20 +16,20 @@ import com.jcraft.jsch.Session;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
-import pl.kocjan.automatizer.domain.host.dto.HostDto;
+import pl.kocjan.automatizer.domain.host.Host;
+import pl.kocjan.automatizer.domain.playbook.Task;
+import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
-import pl.kocjan.automatizer.domain.task.dto.TaskDto;
-import pl.kocjan.automatizer.domain.task.dto.TaskResultDto;
 
 public class SshHostConnection implements HostConnection {
 
 	private final Logger logger = Logger.getLogger(SshHostConnection.class.getName());
 	@Override
-	public Either<Error, List<Either<Error, TaskResultDto>>> runOnRemoteHost(List<TaskDto> taskList, HostDto hostDto) {
+	public Either<Error, List<Either<Error, TaskResultDto>>> runOnRemoteHost(List<Task> taskList, Host host) {
 	    
 	    return configureJsch()
-	    .flatMap(jsch -> establishSession(hostDto, jsch))
-	    .map(session -> executeMultipleCommands(taskList, session));	           		
+	    .flatMap(jsch -> establishSession(host, jsch))
+	    .map(session -> executeMultipleCommands(taskList, session));
 	}
 	
 	private Either<Error, JSch> configureJsch() {
@@ -41,11 +41,11 @@ public class SshHostConnection implements HostConnection {
 		}).toEither(ConnectionError.KNOWN_HOSTS_ERROR);
 	}
 	
-	private Either<Error, Session> establishSession(HostDto hostDto, JSch jsch) {
+	private Either<Error, Session> establishSession(Host host, JSch jsch) {
 		logger.log(Level.INFO, "Establishing session");
 		return Try.of(() -> {
 			Session session;
-			session = jsch.getSession(hostDto.getUsername(), hostDto.getIp(), hostDto.getPort());
+			session = jsch.getSession(host.getUsername(), host.getIp(), host.getPort());
 			session.setConfig("PreferredAuthentications", "publickey");
 			session.setConfig("StrictHostKeyChecking", "yes");
 			session.connect(500);
@@ -53,16 +53,17 @@ public class SshHostConnection implements HostConnection {
 		}).toEither(ConnectionError.HOST_CONNECTION_ERROR);
 	}
 	
-	private List<Either<Error, TaskResultDto>> executeMultipleCommands(List<TaskDto> taskList, Session session) {
+	private List<Either<Error, TaskResultDto>> executeMultipleCommands(List<Task> taskList, Session session) {
+		System.out.println(Thread.currentThread());
 		List<Either<Error, TaskResultDto>> results = new ArrayList<>();
-		for(TaskDto task : taskList) {
+		for(Task task : taskList) {
 			results.add(executeCommand(task, session)
 					.flatMap(channel -> getProcessInformation(channel))
 					.flatMap(exitValue -> processCommandExecutionResult(task, exitValue)));
 		}
 		return results;
 	}
-	private Either<Error, ChannelExec> executeCommand(TaskDto taskDto, Session session) {
+	private Either<Error, ChannelExec> executeCommand(Task taskDto, Session session) {
 		logger.log(Level.INFO, "Executing command");
 		return Try.of(() -> {
 			ChannelExec channel;
@@ -87,7 +88,7 @@ public class SshHostConnection implements HostConnection {
 	}
 		
 	
-	private Either<Error, TaskResultDto> processCommandExecutionResult(TaskDto taskDto, Integer exitValue) {
+	private Either<Error, TaskResultDto> processCommandExecutionResult(Task taskDto, Integer exitValue) {
 		logger.log(Level.INFO, exitValue.toString());
 		return exitValue == 0 ? 
 				Either.right(TaskResultDto.

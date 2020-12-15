@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.kocjan.automatizer.domain.task.dto.TaskDto;
+import pl.kocjan.automatizer.domain.playbook.Task;
 
 @Getter
 @Setter
@@ -14,5 +14,5 @@ import pl.kocjan.automatizer.domain.task.dto.TaskDto;
 @NoArgsConstructor
 public class PlaybookDto {
 	private String hostGroup;
-	private List<TaskDto> tasks;
+	private List<Task> tasks;
 }

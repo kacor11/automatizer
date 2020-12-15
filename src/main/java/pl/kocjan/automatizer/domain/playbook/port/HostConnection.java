@@ -4,10 +4,10 @@ import java.util.List;
 
 import io.vavr.control.Either;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
-import pl.kocjan.automatizer.domain.host.dto.HostDto;
-import pl.kocjan.automatizer.domain.task.dto.TaskDto;
-import pl.kocjan.automatizer.domain.task.dto.TaskResultDto;
+import pl.kocjan.automatizer.domain.host.Host;
+import pl.kocjan.automatizer.domain.playbook.Task;
+import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 
 public interface HostConnection {
-	Either<Error, List<Either<Error, TaskResultDto>>> runOnRemoteHost(List<TaskDto> taskList, HostDto hostDto);
+	Either<Error, List<Either<Error, TaskResultDto>>> runOnRemoteHost(List<Task> taskList, Host host);
 }

@@ -3,6 +3,10 @@ package pl.kocjan.automatizer.domain.playbook;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -13,30 +17,37 @@ import pl.kocjan.automatizer.domain.host.dto.HostDto;
 import pl.kocjan.automatizer.domain.host.port.HostRepository;
 import pl.kocjan.automatizer.domain.playbook.dto.PlaybookDto;
 import pl.kocjan.automatizer.domain.playbook.dto.PlaybookError;
+import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
-import pl.kocjan.automatizer.domain.task.dto.TaskDto;
-import pl.kocjan.automatizer.domain.task.dto.TaskResultDto;
 
 @RequiredArgsConstructor
-class PlaybookExecutor {
-	private final HostRepository hostRepository;
+public class PlaybookExecutor {
 	private final HostConnection hostConnection;
-		
+	private final HostRepository hostRepository;
+	
 	Either<Error, Success> execute(PlaybookDto playbookDto) {
-		// TODO Auto-generated method stub
+		return 
+
+	}		
+		
+		
+	private CompletableFuture<List<Either<Error, List<Either<Error, TaskResultDto>>>>> executePlaybooks(List<Playbook> playbooks) {
+		List<CompletableFuture<Either<Error, List<Either<Error, TaskResultDto>>>>> completableFutures =  
+				playbooks.stream()
+				.map(playbook -> executePlaybookOnSingleHost(playbook))
+				.collect(Collectors.toList());
+		
+		return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture<?>[0]))
+			.thenApply(v -> completableFutures.parallelStream()
+					.map(CompletableFuture::join)
+					.collect(Collectors.toList()));
 	}
 	
-	Either<Error, List<HostDto>> getRequiredHosts(PlaybookDto playbookDto) {
-		return Option
-				.ofOptional(hostRepository.findHostsByGroup(playbookDto.getHostGroup()))
-				.toEither(PlaybookError.HOSTS_GROUP_ERROR);
-	}
-	List<HostDto> executeTasks(List<HostDto> hostList, PlaybookDto playbookDto) {
-		List<CompletableFuture<Either<Error, TaskResultDto>>> completableFutures = new ArrayList<>();
-	}
-	
-	CompletableFuture<Either<Error, TaskResultDto>> executeTaskAsync(HostDto hostDto, TaskDto taskDto) {
+	private CompletableFuture<Either<Error, List<Either<Error, TaskResultDto>>>> executePlaybookOnSingleHost(Playbook playbook) {
 		return CompletableFuture.supplyAsync(() -> 
-			hostConnection.runOnRemoteHost(taskDto, hostDto));
+			hostConnection.runOnRemoteHost(playbook.getTasks(), playbook.getHost()), Executors.newFixedThreadPool(10));
 	}
+
+
+	
 }

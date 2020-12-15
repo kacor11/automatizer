@@ -5,7 +5,7 @@ import java.util.Set;
 
 import lombok.Builder;
 import lombok.Getter;
-import pl.kocjan.automatizer.domain.task.Task;
+import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 
 @Builder
 @Getter
@@ -15,6 +15,6 @@ public class HostDto {
 	private String username;
 	private final int port;
 	private final Set<String> groups;
-	private final List<Task> taskHistory;
+	private final List<TaskResultDto> taskHistory;
 	private boolean isAuthorized;	
 }

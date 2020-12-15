@@ -9,5 +9,5 @@ public interface HostRepository {
 	
 	String saveHost(HostDto host);
 	Optional<HostDto> findHostByIp(String ip);
-	Optional<List<HostDto>> findHostsByGroup(String group);
+	List<HostDto> findHostsByGroup(String group);
 }

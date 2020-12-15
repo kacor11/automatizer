@@ -1,0 +1,10 @@
+hostGroup: database
+invalidField: field
+tasks:
+  - name: name1
+    command: command2
+    
+
+  - name: name2
+  - command: command2
+  

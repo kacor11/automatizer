@@ -43,8 +43,8 @@ public class InMemoryHostRepository implements HostRepository {
 	}
 
 	@Override
-	public Optional<List<HostDto>> findHostsByGroup(String group) {
-		return Optional.ofNullable(hosts.entrySet()
+	public <List<HostDto> findHostsByGroup(String group) {
+		return hosts.entrySet()
 				.stream()
 				.filter(e -> e.getValue().getGroups().contains(group))
 				.map(Map.Entry::getValue)

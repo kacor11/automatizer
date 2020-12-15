@@ -13,18 +13,18 @@ import pl.kocjan.automatizer.adapter.connector.ConnectionError;
 import pl.kocjan.automatizer.adapter.connector.SshHostConnection;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
 import pl.kocjan.automatizer.domain.host.dto.HostDto;
-import pl.kocjan.automatizer.domain.task.dto.TaskDto;
-import pl.kocjan.automatizer.domain.task.dto.TaskResultDto;
+import pl.kocjan.automatizer.domain.playbook.Task;
+import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 
 public class SshConnectorTest {
-	private final TaskDto validTaskDto = TaskDto.builder()
+	private final Task validTaskDto = Task.builder()
 			.command("pwd")
 			.build();
-	private final TaskDto validTaskDto2 = TaskDto.builder()
+	private final Task validTaskDto2 = Task.builder()
 			.command("ls")
 			.build();
 	
-	private final TaskDto invalidIpTaskDto = TaskDto.builder()
+	private final Task invalidIpTaskDto = Task.builder()
 			.command("ls")
 			.build();
 	
@@ -42,7 +42,7 @@ public class SshConnectorTest {
 	@Test
 	public void ShouldReturnTaskResultAfterCommandRun() {
 		//given
-		List<TaskDto> tasks = new ArrayList<>();
+		List<Task> tasks = new ArrayList<>();
 		tasks.add(validTaskDto);
 		tasks.add(validTaskDto2);
 		SshHostConnection connection = new SshHostConnection();
