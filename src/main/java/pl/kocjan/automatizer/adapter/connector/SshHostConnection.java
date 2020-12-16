@@ -3,7 +3,6 @@ package pl.kocjan.automatizer.adapter.connector;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,20 +15,35 @@ import com.jcraft.jsch.Session;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
+import pl.kocjan.automatizer.domain.common.vavr.Success;
 import pl.kocjan.automatizer.domain.host.Host;
 import pl.kocjan.automatizer.domain.playbook.Task;
-import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
 
 public class SshHostConnection implements HostConnection {
 
 	private final Logger logger = Logger.getLogger(SshHostConnection.class.getName());
 	@Override
-	public Either<Error, List<Either<Error, TaskResultDto>>> runOnRemoteHost(List<Task> taskList, Host host) {
-	    
+	public Either<Error, Session> establishConnection(Host host) {	    
 	    return configureJsch()
-	    .flatMap(jsch -> establishSession(host, jsch))
-	    .map(session -> executeMultipleCommands(taskList, session));
+	    .flatMap(jsch -> establishSession(host, jsch));
+
+	}
+	@Override
+	public Either<Error, Success> execute(String command, Session session) {
+		return executeCommand(command, session)
+				.flatMap(channel -> getProcessInformation(channel))
+				.flatMap(exitValue -> processCommandExecutionResult(exitValue));
+	}
+	public Either<Error, ChannelExec> executeCommand(String command, Session session) {
+		logger.log(Level.INFO, "Executing command");
+		return Try.of(() -> {
+			ChannelExec channel;
+			channel = (ChannelExec) session.openChannel("exec");
+			channel.setCommand(command);		        
+			channel.connect();
+			return channel;
+		}).toEither(ConnectionError.HOST_EXECUTION_ERROR);
 	}
 	
 	private Either<Error, JSch> configureJsch() {
@@ -53,30 +67,11 @@ public class SshHostConnection implements HostConnection {
 		}).toEither(ConnectionError.HOST_CONNECTION_ERROR);
 	}
 	
-	private List<Either<Error, TaskResultDto>> executeMultipleCommands(List<Task> taskList, Session session) {
-		System.out.println(Thread.currentThread());
-		List<Either<Error, TaskResultDto>> results = new ArrayList<>();
-		for(Task task : taskList) {
-			results.add(executeCommand(task, session)
-					.flatMap(channel -> getProcessInformation(channel))
-					.flatMap(exitValue -> processCommandExecutionResult(task, exitValue)));
-		}
-		return results;
-	}
-	private Either<Error, ChannelExec> executeCommand(Task taskDto, Session session) {
-		logger.log(Level.INFO, "Executing command");
-		return Try.of(() -> {
-			ChannelExec channel;
-			channel = (ChannelExec) session.openChannel("exec");
-			channel.setCommand(taskDto.getCommand());		        
-			channel.connect();
-			return channel;
-		}).toEither(ConnectionError.HOST_EXECUTION_ERROR);
-	}
+	
 	
 	private Either <Error, Integer> getProcessInformation(Channel channel) {
 		logger.log(Level.INFO, "Processing info session");
-		return Try.of(() -> {
+		return Try.of(() -> {	
 	        InputStream is = channel.getInputStream();
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 	        while((br.readLine()) != null) {
@@ -88,15 +83,8 @@ public class SshHostConnection implements HostConnection {
 	}
 		
 	
-	private Either<Error, TaskResultDto> processCommandExecutionResult(Task taskDto, Integer exitValue) {
-		logger.log(Level.INFO, exitValue.toString());
-		return exitValue == 0 ? 
-				Either.right(TaskResultDto.
-						builder()
-						.exitValue(exitValue)
-						.build()) : Either.left(ConnectionError.HOST_EXECUTION_ERROR);
-	}	
-	          		        		        
-
+	private Either<Error, Success> processCommandExecutionResult(Integer exitValue) {
+		return exitValue == 0? Either.right(new Success()) : Either.left(ConnectionError.COMMAND_EXECUTION_ERROR);
+	}
 
 }

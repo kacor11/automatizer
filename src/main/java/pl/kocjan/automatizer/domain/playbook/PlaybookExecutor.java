@@ -1,22 +1,18 @@
 package pl.kocjan.automatizer.domain.playbook;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Test;
+import com.jcraft.jsch.Session;
 
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
 import pl.kocjan.automatizer.domain.common.vavr.Success;
-import pl.kocjan.automatizer.domain.host.dto.HostDto;
+import pl.kocjan.automatizer.domain.host.Host;
 import pl.kocjan.automatizer.domain.host.port.HostRepository;
 import pl.kocjan.automatizer.domain.playbook.dto.PlaybookDto;
-import pl.kocjan.automatizer.domain.playbook.dto.PlaybookError;
 import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
 
@@ -29,25 +25,27 @@ public class PlaybookExecutor {
 		return 
 
 	}		
-		
-		
-	private CompletableFuture<List<Either<Error, List<Either<Error, TaskResultDto>>>>> executePlaybooks(List<Playbook> playbooks) {
-		List<CompletableFuture<Either<Error, List<Either<Error, TaskResultDto>>>>> completableFutures =  
-				playbooks.stream()
-				.map(playbook -> executePlaybookOnSingleHost(playbook))
-				.collect(Collectors.toList());
-		
-		return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture<?>[0]))
-			.thenApply(v -> completableFutures.parallelStream()
-					.map(CompletableFuture::join)
-					.collect(Collectors.toList()));
-	}
 	
-	private CompletableFuture<Either<Error, List<Either<Error, TaskResultDto>>>> executePlaybookOnSingleHost(Playbook playbook) {
-		return CompletableFuture.supplyAsync(() -> 
-			hostConnection.runOnRemoteHost(playbook.getTasks(), playbook.getHost()), Executors.newFixedThreadPool(10));
+	private Either<Error, Success> executePlaybookOnSingleHost(Playbook playbook) {
+		Host host = playbook.getHost();
+		Either<Error, Session> session = hostConnection.establishConnection(host);
+		if(session.isLeft()) {
+			return Either.left(session.getLeft());
+		}
+		List<Task> tasks = playbook.getTasks();
+		for(Task task : tasks) {
+			Either<Error, Success> result = hostConnection.execute(task.getCommand(), session.get());
+			task.executedOn(LocalDateTime.now());
+			if(result.isLeft()) {
+				task.executionResult(Task.Result.FAILED);
+			} else {
+				task.executionResult(Task.Result.SUCCEED);
+		}
+			host.submitTask(task);
+			return Either.right(new Success());
 	}
 
+	
 
 	
 }
