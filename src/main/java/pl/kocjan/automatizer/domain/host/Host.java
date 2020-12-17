@@ -1,5 +1,6 @@
 package pl.kocjan.automatizer.domain.host;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,24 +18,24 @@ public class Host {
 	private int port;
 	private boolean isAuthorized;
 	private List<Task> executedTasks;
-	private List<String> taskHistory;
 	private Set<String> groups;
 	
-	static Host buildHost(CreateHostDto dto) {
+	public static Host buildHost(CreateHostDto dto) {
 				return Host.builder()
 						.ip(dto.getIp())
 						.port(dto.getPort())
 						.groups(Set.of("Default"))
 						.isAuthorized(false)
+						.executedTasks(new ArrayList<>())
 						.build();								
 	}
 	
 		
-	void authorize() {
+	public void authorize() {
 		this.isAuthorized = true;
 	}
 	
-	void submitTask(Task task) { 
+	public void submitTask(Task task) { 
 		executedTasks.add(task);
 	}
 }

@@ -17,6 +17,7 @@ public class HostFacade {
 	private final HostReader hostReader;
 	private final HostCreator hostCreator;
 	private final HostMapper hostMapper;
+	private final HostUpdater hostUpdater;
 	private final HostAuthorizer hostAuthorizer;
 	private final LocalCommandRunner commandRunner;
 		
@@ -25,8 +26,13 @@ public class HostFacade {
 		this.hostReader = new HostReader(hostMapper, hostRepository);
 		this.commandRunner = new LocalCommandRunner();
 		this.hostCreator = new HostCreator(hostRepository, hostMapper);
+		this.hostUpdater = new HostUpdater(hostRepository, hostMapper);
 		this.hostAuthorizer = new HostAuthorizer(hostRepository, commandRunner, hostMapper);
 	}
+	public Either<Error, Success> updateHost(Host host) {
+		return hostReader.updateHost(host);
+	}
+	
 	public Either<Error, Success> createHost(CreateHostDto dto) {
 		return hostCreator.createHost(dto);
 	}

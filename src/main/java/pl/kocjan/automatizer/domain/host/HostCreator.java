@@ -28,17 +28,7 @@ class HostCreator {
 		return saveHost(host);
 				
 	}
-	
-	private Either<Error, Success> saveHost(Host host) {
-		return Try.of(() -> saveHostInRepository(host))
-				.toEither(HostError.DATABASE_ERROR);
-	}
-	
-	private Success saveHostInRepository(Host host) {
-		hostRepository.saveHost(hostMapper.hostToDto(host));
-		return new Success();
-	}
-	
+		
 	private Optional<Error> validateHostData(CreateHostDto createHostDto) {
 		return hostRepository.findHostByIp(createHostDto.getIp()).isPresent() ? 
 				Optional.of(HostError.HOST_ALREADY_EXISTS) : Optional.empty();

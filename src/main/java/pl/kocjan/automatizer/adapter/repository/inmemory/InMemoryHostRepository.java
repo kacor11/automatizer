@@ -43,12 +43,12 @@ public class InMemoryHostRepository implements HostRepository {
 	}
 
 	@Override
-	public <List<HostDto> findHostsByGroup(String group) {
+	public List<HostDto> findHostsByGroup(String group) {
 		return hosts.entrySet()
 				.stream()
 				.filter(e -> e.getValue().getGroups().contains(group))
 				.map(Map.Entry::getValue)
-				.collect(Collectors.toList()));				
+				.collect(Collectors.toList());				
 	}
 
 }
