@@ -3,34 +3,31 @@ package pl.kocjan.automatizer.connector;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
+
+import com.jcraft.jsch.Session;
 
 import io.vavr.control.Either;
 import pl.kocjan.automatizer.adapter.connector.ConnectionError;
 import pl.kocjan.automatizer.adapter.connector.SshHostConnection;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
+import pl.kocjan.automatizer.domain.common.vavr.Success;
 import pl.kocjan.automatizer.domain.host.dto.HostDto;
-import pl.kocjan.automatizer.domain.playbook.Task;
-import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 
 public class SshConnectorTest {
-	private final Task validTaskDto = Task.builder()
-			.command("pwd")
-			.build();
-	private final Task validTaskDto2 = Task.builder()
-			.command("ls")
-			.build();
-	
-	private final Task invalidIpTaskDto = Task.builder()
-			.command("ls")
-			.build();
-	
+	private final String validCommand = "pwd";
+
+		
 	private final HostDto validHostDto = 
 			HostDto.builder()
 			.ip("localhost")
+			.port(22)
+			.username("kacor11")
+			.build();
+	
+	private final HostDto invalidHostDto = 
+			HostDto.builder()
+			.ip("2345")
 			.port(22)
 			.username("kacor11")
 			.build();
@@ -40,31 +37,42 @@ public class SshConnectorTest {
 		
 	
 	@Test
-	public void ShouldReturnTaskResultAfterCommandRun() {
+	public void shouldEstablishConnectionWithRemoteHost() {
+		
 		//given
-		List<Task> tasks = new ArrayList<>();
-		tasks.add(validTaskDto);
-		tasks.add(validTaskDto2);
 		SshHostConnection connection = new SshHostConnection();
 		
 		//when
-		Either<Error, List<Either<Error, TaskResultDto>>> result = connection.runOnRemoteHost(tasks, validHostDto);
+		Either<Error, Session> result = connection.establishConnection(validHostDto);
 		
 		//then
 		assertTrue(result.isRight());
 		
 	}
 	
-
-	public void ShouldFailWhenConnectingWithWrongIp() {
+	@Test
+	public void shouldFailWhenConnectingWithWrongIp() {
 		//given
 		SshHostConnection connection = new SshHostConnection();
 		
 		//when
-		//Either<Error, TaskResultDto> result = connection.runOnRemoteHost(invalidIpTaskDto);
+		Either<Error, Session> result = connection.establishConnection(invalidHostDto);
 		
 		//then
-		//assertEquals(ConnectionError.HOST_CONNECTION_ERROR, result.getLeft());
+		assertEquals(ConnectionError.HOST_CONNECTION_ERROR, result.getLeft());
 		
+	}
+	
+	@Test
+	public void shouldExecuteCommandWithCorrectHostAndCommand() {
+		//given
+		SshHostConnection connection = new SshHostConnection();
+		Either<Error, Session> session = connection.establishConnection(validHostDto);
+		
+		//when
+		Either<Error, Success> result = connection.execute(validCommand, session.get());
+		
+		//then
+		assertEquals(Either.right(new Success()), result);		
 	}
 }

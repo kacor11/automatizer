@@ -26,7 +26,7 @@ public class HostFacade {
 		this.hostReader = new HostReader(hostMapper, hostRepository);
 		this.commandRunner = new LocalCommandRunner();
 		this.hostCreator = new HostCreator(hostRepository, hostMapper);
-		this.hostUpdater = new HostUpdater(hostRepository, hostMapper);
+		this.hostUpdater = new HostUpdater(hostMapper, hostRepository);
 		this.hostAuthorizer = new HostAuthorizer(hostRepository, commandRunner, hostMapper);
 	}
 	public Either<Error, Success> updateHost(Host host) {
@@ -45,7 +45,7 @@ public class HostFacade {
 		return hostReader.readHostByIp(ip);
 	}
 	
-	public List<Host> getHostsWithGroup(String group) {
+	public List<HostDto> getHostsWithGroup(String group) {
 		return hostReader.getHostsWithGroup(group);
 	}
 	

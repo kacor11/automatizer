@@ -1,5 +1,6 @@
 package pl.kocjan.automatizer.adapter.repository.inmemory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,15 +19,16 @@ public class InMemoryHostRepository implements HostRepository {
 	
 	public InMemoryHostRepository() {
 		hosts.put("host1", HostDto.builder()
-				.ip("host1")
+				.ip("localhost")
 				.port(22)
 				.groups(Set.of("DEFAULT"))
+				.executedTasks(new ArrayList<>())
 				.build());
 		
 		hosts.put("host2", HostDto.builder()
-				.ip("host2")
+				.ip("ip2")
 				.port(22)
-				.groups(Set.of("DEFAULT"))
+				.groups(Set.of("NOT_DEFAULT"))
 				.build());
 	}
 	
@@ -48,7 +50,7 @@ public class InMemoryHostRepository implements HostRepository {
 				.stream()
 				.filter(e -> e.getValue().getGroups().contains(group))
 				.map(Map.Entry::getValue)
-				.collect(Collectors.toList());				
+				.collect(Collectors.toList());	
 	}
 
 }

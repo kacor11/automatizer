@@ -13,6 +13,7 @@ import pl.kocjan.automatizer.domain.common.vavr.Error;
 import pl.kocjan.automatizer.domain.common.vavr.Success;
 import pl.kocjan.automatizer.domain.host.Host;
 import pl.kocjan.automatizer.domain.host.HostFacade;
+import pl.kocjan.automatizer.domain.host.HostMapper;
 import pl.kocjan.automatizer.domain.playbook.dto.PlaybookDto;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
 
@@ -21,6 +22,7 @@ class PlaybookExecutor {
 	private final HostConnection hostConnection;
 	private final PlaybookCreator playbookCreator;
 	private final HostFacade hostFacade;
+	private final HostMapper hostMapper;
 	
 	Either<Error, List<Either<Error, Host>>> execute(PlaybookDto playbookDto) {
 		return playbookCreator.createForGroup(playbookDto)
@@ -37,7 +39,7 @@ class PlaybookExecutor {
 				.collect(Collectors.toList());
 		
 		CompletableFuture<Void> allFuturesResult =
-				CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
+				CompletableFuture.allOf(futureList.toArray(new CompletableFuture[futureList.size()]));
 		
 		return allFuturesResult.thenApply(v -> 
 				futureList.stream()
@@ -47,7 +49,7 @@ class PlaybookExecutor {
 	
 	 Either<Error, Host> executePlaybookOnSingleHost(Playbook playbook) {
 		Host host = playbook.getHost();
-		Either<Error, Session> session = hostConnection.establishConnection(host);
+		Either<Error, Session> session = hostConnection.establishConnection(hostMapper.hostToDto(host));
 		if(session.isLeft()) {
 			return Either.left(session.getLeft());
 		}

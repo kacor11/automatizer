@@ -17,6 +17,7 @@ import io.vavr.control.Try;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
 import pl.kocjan.automatizer.domain.common.vavr.Success;
 import pl.kocjan.automatizer.domain.host.Host;
+import pl.kocjan.automatizer.domain.host.dto.HostDto;
 import pl.kocjan.automatizer.domain.playbook.Task;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
 
@@ -24,7 +25,7 @@ public class SshHostConnection implements HostConnection {
 
 	private final Logger logger = Logger.getLogger(SshHostConnection.class.getName());
 	@Override
-	public Either<Error, Session> establishConnection(Host host) {	    
+	public Either<Error, Session> establishConnection(HostDto host) {	    
 	    return configureJsch()
 	    .flatMap(jsch -> establishSession(host, jsch));
 
@@ -55,7 +56,7 @@ public class SshHostConnection implements HostConnection {
 		}).toEither(ConnectionError.KNOWN_HOSTS_ERROR);
 	}
 	
-	private Either<Error, Session> establishSession(Host host, JSch jsch) {
+	private Either<Error, Session> establishSession(HostDto host, JSch jsch) {
 		logger.log(Level.INFO, "Establishing session");
 		return Try.of(() -> {
 			Session session;

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
-import pl.kocjan.automatizer.domain.host.dto.HostDto;
 import pl.kocjan.automatizer.domain.playbook.Task;
 
 @Builder

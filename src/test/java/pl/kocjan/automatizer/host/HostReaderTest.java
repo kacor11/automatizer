@@ -39,14 +39,12 @@ public class HostReaderTest {
 		String groupName = "DEFAULT";
 		
 		//when
-		Optional<List<HostDto>> result = hostFacade.getHostsWithGroup(groupName);
+		List<HostDto> result = hostFacade.getHostsWithGroup(groupName);
 		
 		//then
-
-		assertTrue(result.isPresent());
-		assertEquals(2, result.get().size());
-		assertEquals(correctIp, result.get().get(0).getIp());
-		assertEquals(correctIp2, result.get().get(1).getIp());
+		assertEquals(2, result.size());
+		assertEquals(correctIp, result.get(0).getIp());
+		assertEquals(correctIp2, result.get(1).getIp());
 		
 	}
 }

@@ -25,11 +25,8 @@ class HostReader {
 		return hostRepository.findHostByIp(ip);
 	}
 	
-	List<Host> getHostsWithGroup(String group) {
-		return hostRepository.findHostsByGroup(group)
-				.stream()
-				.map(host -> mapper.dtoToHost(host))
-				.collect(Collectors.toList());
+	List<HostDto> getHostsWithGroup(String group) {
+		return hostRepository.findHostsByGroup(group);
 	}
 	
 	Either<Error, Success> updateHost(Host host) {
