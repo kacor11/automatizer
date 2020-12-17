@@ -1,27 +1,31 @@
 package pl.kocjan.automatizer.domain.playbook;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import pl.kocjan.automatizer.domain.host.dto.HostDto;
 
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Task {
-	private enum Result {
-		SUCCED, FAILED
+	public enum Result {
+		SUCCEED, FAILED
 	}
+	long id;
 	String name;
 	String command;
 	LocalDateTime executionDate;
-	Task executedTask;
 	Result executionResult;
+	
+	public void executionResult(Result result) {
+		executionResult = result;
+	}
+	
+	public void executedOn(LocalDateTime date) {
+		executionDate = date;
+	}
 }

@@ -10,7 +10,6 @@ import pl.kocjan.automatizer.domain.playbook.Task;
 @Builder
 @Getter
 public class TaskResultDto {
-	HostDto executedOn;
 	LocalDateTime executionDate;
 	Task executedTask;
 	int exitValue;
