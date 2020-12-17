@@ -1,20 +1,23 @@
 package pl.kocjan.automatizer.playbook;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
 
 import io.vavr.control.Either;
 import pl.kocjan.automatizer.adapter.connector.SshHostConnection;
 import pl.kocjan.automatizer.domain.common.vavr.Error;
+import pl.kocjan.automatizer.domain.common.vavr.Success;
+import pl.kocjan.automatizer.domain.host.Host;
+import pl.kocjan.automatizer.domain.host.dto.CreateHostDto;
 import pl.kocjan.automatizer.domain.host.dto.HostDto;
+import pl.kocjan.automatizer.domain.playbook.Playbook;
 import pl.kocjan.automatizer.domain.playbook.PlaybookExecutor;
 import pl.kocjan.automatizer.domain.playbook.Task;
-import pl.kocjan.automatizer.domain.playbook.dto.PlaybookDto;
-import pl.kocjan.automatizer.domain.playbook.dto.TaskResultDto;
 import pl.kocjan.automatizer.domain.playbook.port.HostConnection;
 
 public class PlaybookExecutorTest {
@@ -27,7 +30,7 @@ public class PlaybookExecutorTest {
 			.build();
 	
 	private final Task invalidIpTaskDto = Task.builder()
-			.command("ls")
+			.command("lsss")
 			.build();
 	
 	private final HostDto validHostDto = 
@@ -40,7 +43,6 @@ public class PlaybookExecutorTest {
 	
 	@Test 
 	public void asf() {
-		HostConnection con = new SshHostConnection();
 		List<HostDto> hosts = new ArrayList<>();
 		hosts.add(validHostDto);
 		hosts.add(validHostDto);
@@ -48,19 +50,27 @@ public class PlaybookExecutorTest {
 		hosts.add(validHostDto);
 		List<Task> tasks = new ArrayList<>();
 		tasks.add(validTaskDto);
+		tasks.add(invalidIpTaskDto);
+		tasks.add(invalidIpTaskDto);
 		tasks.add(validTaskDto2);
 		tasks.add(validTaskDto);
 		tasks.add(validTaskDto2);
-		tasks.add(validTaskDto);
-		tasks.add(validTaskDto2);
-		PlaybookExecutor pe = new PlaybookExecutor(con);
-		PlaybookDto pb = new PlaybookDto("dupa", tasks);
-		Either<Error, List<Either<Error, TaskResultDto>>> result;
-			result = pe.executeTasks(hosts, pb).join().get(0);
-			System.out.println(result);
-			System.out.println(result);
-			System.out.println(result);
+		CreateHostDto hostCreate = CreateHostDto.builder()
+					.ip("localhost")
+					.port(22)
+					.build();
+
 		
+		HostConnection conn = new SshHostConnection();
+		PlaybookExecutor pe = new PlaybookExecutor(conn);
+		Host host = Host.buildHost(hostCreate);
+		Playbook pb = new Playbook(host, tasks);
+
+			Either<Error, Success> result = pe.executePlaybookOnSingleHost(pb);
+
+		System.out.println(result);
+		pb.getHost().getExecutedTasks().forEach(task -> System.out.println(task.getExecutionDate()));
+		assertEquals(result.isRight(), true);
 		
 	}
 }

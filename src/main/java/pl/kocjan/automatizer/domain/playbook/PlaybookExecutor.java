@@ -3,7 +3,6 @@ package pl.kocjan.automatizer.domain.playbook;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.jcraft.jsch.Session;
