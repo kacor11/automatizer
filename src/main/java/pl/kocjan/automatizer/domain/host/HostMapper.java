@@ -1,7 +1,5 @@
 package pl.kocjan.automatizer.domain.host;
 
-import java.util.ArrayList;
-
 import pl.kocjan.automatizer.domain.host.dto.HostDto;
 
 

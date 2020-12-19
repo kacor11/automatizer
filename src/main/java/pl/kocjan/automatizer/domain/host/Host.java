@@ -24,7 +24,7 @@ public class Host {
 				return Host.builder()
 						.ip(dto.getIp())
 						.port(dto.getPort())
-						.groups(Set.of("Default"))
+						.groups(Set.of("DEFAULT"))
 						.isAuthorized(false)
 						.executedTasks(new ArrayList<>())
 						.build();								

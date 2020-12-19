@@ -21,10 +21,9 @@ public class HibernateConfig{
 public DataSource getDatasource() {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("localhost:3306");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/test");
+        dataSource.setUsername("user");
+        dataSource.setPassword("user");
 
         return dataSource;
     }
@@ -34,8 +33,6 @@ public SessionFactory getSessionFactory() throws IOException{
 
 LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
  sessionFactoryBean.setPackagesToScan("pl");
-
-
   sessionFactoryBean.setHibernateProperties(getHibernateProperties());
     sessionFactoryBean.setDataSource(getDatasource());
     sessionFactoryBean.afterPropertiesSet();
@@ -55,8 +52,9 @@ LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
 private static Properties getHibernateProperties() {
 
         Properties hibernateProperties = new Properties();
-        hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
         hibernateProperties.put("hibernate.show_sql", true);
+        hibernateProperties.put("hibernate.hbm2ddl.auto", "create");
 
         return hibernateProperties;
     }
