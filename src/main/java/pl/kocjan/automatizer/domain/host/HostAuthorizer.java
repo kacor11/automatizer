@@ -41,7 +41,7 @@ class HostAuthorizer {
 	
 	private Success updateHostInRepository(Host host) {
 		hostRepository.saveHost(hostMapper.hostToDto(host));
-		return new Success();
+		return new Success("Host authorized successfully");
 	}
 	
 }

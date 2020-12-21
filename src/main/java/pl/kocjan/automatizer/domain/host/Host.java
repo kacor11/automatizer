@@ -23,6 +23,7 @@ public class Host {
 	public static Host buildHost(CreateHostDto dto) {
 				return Host.builder()
 						.ip(dto.getIp())
+						.username(dto.getUsername())
 						.port(dto.getPort())
 						.groups(Set.of("DEFAULT"))
 						.isAuthorized(false)

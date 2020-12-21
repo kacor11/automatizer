@@ -40,15 +40,6 @@ LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
     return sessionFactoryBean.getObject();
 }
 
-@Bean
-    public HibernateTransactionManager getTransactionManager() throws IOException{
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(getSessionFactory());
-
-        return transactionManager;
-   }
-
-
 private static Properties getHibernateProperties() {
 
         Properties hibernateProperties = new Properties();

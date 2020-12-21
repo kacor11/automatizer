@@ -1,7 +1,9 @@
 package pl.kocjan.automatizer.adapter.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,16 @@ public class ResponseResolver {
 				.map(this::succesResponse)
 				.getOrElseGet(this::failureResponse);				
 	}
+	 
+	 <T> ResponseEntity<?> resolve(Optional<T> optional) {
+		 return optional
+				 .map(value -> new ResponseEntity<>(optional, HttpStatus.OK))
+				 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	 }
+	 
+	 <T> ResponseEntity<?> resolve(List<T> list) {
+		 return succesResponse(list);
+	 }
 	
 	private ResponseEntity<Object> succesResponse(Object obj) {
 		return new ResponseEntity<>(obj, HttpStatus.OK);

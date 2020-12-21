@@ -26,7 +26,11 @@ public class MysqlHostRepository implements HostRepository {
 	@Override
 	@Transactional
 	public String saveHost(HostDto host) {
-		session.getCurrentSession().save(mapper.dtoToHostEntity(host));
+		try {
+			session.getCurrentSession().merge(mapper.dtoToHostEntity(host));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		return host.getIp();
 	}
 

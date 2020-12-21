@@ -32,7 +32,7 @@ public class HostMapper {
 				.id(entity.getId())
 				.ip(entity.getIp())
 				.port(entity.getHostPort())
-				.isAuthorized(entity.isAuthorized())
+				.isAuthorized(entity.getIsAuthorized())
 				.executedTasks(mapEntitiesToTasks(entity.getExecutedTasks()))
 				.groups(entity.getHostGroups())
 				.build();

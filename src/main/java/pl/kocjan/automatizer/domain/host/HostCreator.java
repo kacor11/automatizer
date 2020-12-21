@@ -36,7 +36,7 @@ class HostCreator {
 	
 	private Success saveHostInRepository(Host host) {
 		hostRepository.saveHost(hostMapper.hostToDto(host));
-		return new Success();
+		return new Success("Host created successfully");
 	}
 	
 	private Optional<Error> validateHostData(CreateHostDto createHostDto) {
