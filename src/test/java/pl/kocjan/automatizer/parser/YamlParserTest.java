@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,11 +22,18 @@ public class YamlParserTest {
 	@Test
 	public void shouldCorrectlyParseYamlFile() {
 		//given
-		File validYamlFile = new File("src/test/java/pl/kocjan/automatizer/parser/test_valid.yaml");
+		byte[] fileContent;
+		try {
+			fileContent = Files.readAllBytes(Paths.get("src/test/java/pl/kocjan/automatizer/parser/test_valid.yaml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
 		YamlParser parser = new YamlParser();
 		
 		//when
-		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(validYamlFile);
+		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(fileContent);
 		//then		
 		assertTrue(result.isRight());
 		assertEquals(VALID_HOST_GROUP_FROM_FILE, result.get().getHostGroup());	
@@ -32,11 +42,18 @@ public class YamlParserTest {
 	@Test
 	public void shouldFailWithInvalidYamlFile() {
 		//given
-		File invalidYamlFile = new File("src/test/java/pl/kocjan/automatizer/parser/test_invalid.yaml");
+		byte[] fileContent;
+		try {
+			fileContent = Files.readAllBytes(Paths.get("src/test/java/pl/kocjan/automatizer/parser/test_invalid.yaml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
 		YamlParser parser = new YamlParser();
 		
 		//when
-		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(invalidYamlFile);
+		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(fileContent);
 		
 		//then		
 		assertTrue(result.isLeft());

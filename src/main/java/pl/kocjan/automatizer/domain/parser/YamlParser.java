@@ -14,10 +14,10 @@ import pl.kocjan.automatizer.domain.playbook.dto.PlaybookDto;
 public class YamlParser {
 	
 	
-	public Either<Error, PlaybookDto> yamlToPlaybook(File yamlFile) {
+	public Either<Error, PlaybookDto> yamlToPlaybook(byte[] byteArr) {
 		ObjectMapper mapper;
 		mapper = new ObjectMapper(new YAMLFactory());
-		return Try.of(() -> mapper.readValue(yamlFile, PlaybookDto.class))
+		return Try.of(() -> mapper.readValue(byteArr, PlaybookDto.class))
 				.toEither(ParsingError.PARSING_YAML_FILE_FAILED);
 	}
 	
