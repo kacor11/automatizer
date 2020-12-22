@@ -1,8 +1,11 @@
 package pl.kocjan.automatizer.adapter.repository.entity;
 
+import org.springframework.stereotype.Component;
+
 import pl.kocjan.automatizer.domain.common.Role;
 import pl.kocjan.automatizer.domain.user.dto.UserDto;
 
+@Component
 public class UserMapper {
 	public UserDto entityToDto(UserEntity entity) {
 		return UserDto.builder()
