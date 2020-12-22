@@ -16,7 +16,7 @@ class User {
 	private final String username;
 	private final String password;
 	private final String email;
-	private final Role role;
+	private Role role;
 	private final LocalDateTime created;
 	
 	static User createUser(CreateUserDto dto) {
@@ -27,5 +27,9 @@ class User {
 				.role(Role.NOT_VERIFIED)
 				.created(LocalDateTime.now())
 				.build();
+	}
+	
+	void verifyUser() {
+		this.role = Role.VERIFIED;
 	}
 }

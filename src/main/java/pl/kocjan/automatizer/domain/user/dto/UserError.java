@@ -8,7 +8,8 @@ public enum UserError implements Error {
 	
 	USERNAME_ALREADY_EXISTS("There is already user with this username"),
 	EMAIL_ALREADY_EXISTS("This e-mail is already in use"),
-	DATABASE_ERROR("Error during user persistance");
+	DATABASE_ERROR("Error during user persistance"),
+	USER_NOT_FOUND("No user with specific nickname");
 	
 	private final String error;
 	
