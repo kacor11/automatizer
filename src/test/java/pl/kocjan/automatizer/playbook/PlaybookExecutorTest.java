@@ -1,5 +1,6 @@
 package pl.kocjan.automatizer.playbook;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import pl.kocjan.automatizer.adapter.connector.SshHostConnection;
 import pl.kocjan.automatizer.adapter.repository.inmemory.InMemoryHostRepository;
 import pl.kocjan.automatizer.domain.host.HostFacade;
-import pl.kocjan.automatizer.domain.host.dto.HostDto;
 import pl.kocjan.automatizer.domain.host.port.HostRepository;
 import pl.kocjan.automatizer.domain.playbook.PlaybookFacade;
 import pl.kocjan.automatizer.domain.playbook.Task;
@@ -46,4 +46,5 @@ public class PlaybookExecutorTest {
 		//then
 		assertTrue(result.isRight());
 	}
+
 }

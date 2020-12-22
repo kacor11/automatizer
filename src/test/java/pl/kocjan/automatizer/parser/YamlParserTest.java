@@ -17,7 +17,7 @@ import pl.kocjan.automatizer.domain.playbook.dto.PlaybookDto;
 
 public class YamlParserTest {
 	
-	private final String VALID_HOST_GROUP_FROM_FILE = "database";
+	private final String VALID_HOST_GROUP_FROM_FILE = "DEFAULT";
 	
 	@Test
 	public void shouldCorrectlyParseYamlFile() {
@@ -35,8 +35,11 @@ public class YamlParserTest {
 		//when
 		Either<Error, PlaybookDto> result = parser.yamlToPlaybook(fileContent);
 		//then		
+		System.out.println(result.isRight() + "is right?");
+		System.out.println(fileContent.length + "length");
 		assertTrue(result.isRight());
 		assertEquals(VALID_HOST_GROUP_FROM_FILE, result.get().getHostGroup());	
+		assertEquals(2, result.get().getTasks().size());
 	}
 	
 	@Test

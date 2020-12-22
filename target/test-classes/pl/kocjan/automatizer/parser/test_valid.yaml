@@ -1,9 +1,9 @@
-hostGroup: database
+hostGroup: DEFAULT
 tasks:
   - name: name1
-    command: command2
+    command: pwd
     
 
   - name: name2
-  - command: command2
-  
+    command: ls
+ 
