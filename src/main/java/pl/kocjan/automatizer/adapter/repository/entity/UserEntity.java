@@ -11,20 +11,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@Getter
 @Builder
 @Entity
+@Getter
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private  Long id;
-	private  String username;
-	private  String password;
-	private  String email;
-	private  String role;
-	private  LocalDateTime created;
+	private Long id;
+	private String username;
+	private String password;
+	private String email;
+	private String role;
+	private LocalDateTime created;
 }

@@ -12,10 +12,10 @@ import pl.kocjan.automatizer.domain.common.Role;
 public class UserDto {
 
 	
-	private final Long id;
-	private final String username;
-	private final String password;
-	private final String email;
-	private final Role role;
-	private final LocalDateTime created;
+	private Long id;
+	private String username;
+	private String password;
+	private String email;
+	private Role role;
+	private LocalDateTime created;
 }

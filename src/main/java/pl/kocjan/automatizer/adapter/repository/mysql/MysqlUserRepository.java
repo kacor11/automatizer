@@ -2,6 +2,8 @@ package pl.kocjan.automatizer.adapter.repository.mysql;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -20,6 +22,7 @@ public class MysqlUserRepository implements UserRepository {
 	UserMapper mapper;
 	
 	@Override
+	@Transactional
 	public Optional<UserDto> findByEmail(String email) {
 		Session currentSession = session.getCurrentSession();
 		@SuppressWarnings("unchecked")
@@ -31,6 +34,7 @@ public class MysqlUserRepository implements UserRepository {
 	}
 
 	@Override
+	@Transactional
 	public Optional<UserDto> findByUsername(String username) {
 		Session currentSession = session.getCurrentSession();
 		@SuppressWarnings("unchecked")
@@ -42,6 +46,7 @@ public class MysqlUserRepository implements UserRepository {
 	}
 
 	@Override
+	@Transactional
 	public String saveUser(UserDto userDto) {
 		try {
 			session.getCurrentSession().merge(mapper.dtoToEntity(userDto));

@@ -29,13 +29,13 @@ public class UserMapper {
 				.build();		
 	}
 	
-	private String roleToString(Role role) {
+	public String roleToString(Role role) {
 		if(role == Role.ADMIN) return "ADMIN";
 		if(role == Role.VERIFIED) return "VERIFIED";
 		return "NOT_VERIFIED";
 	}
 	
-	private Role stringToRole(String role) {
+	public Role stringToRole(String role) {
 		if(role.equals("ADMIN")) return Role.ADMIN;
 		if(role.equals("VERIFIED")) return Role.VERIFIED;
 		return Role.NOT_VERIFIED;
