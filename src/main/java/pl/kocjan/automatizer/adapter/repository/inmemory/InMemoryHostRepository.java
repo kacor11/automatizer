@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import lombok.RequiredArgsConstructor;
 import pl.kocjan.automatizer.domain.host.dto.HostDto;
 import pl.kocjan.automatizer.domain.host.port.HostRepository;
 
