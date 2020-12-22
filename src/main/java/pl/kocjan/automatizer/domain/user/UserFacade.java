@@ -18,7 +18,7 @@ public class UserFacade {
 		this.userCreator = new UserCreator(userMapper, userRepository);
 	}
 	
-	Either<Error, Success> create (CreateUserDto createUserDto) {
+	public Either<Error, Success> create (CreateUserDto createUserDto) {
 		return userCreator.create(createUserDto);
 	}
 }

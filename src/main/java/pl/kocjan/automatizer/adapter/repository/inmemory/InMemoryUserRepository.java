@@ -1,8 +1,10 @@
 package pl.kocjan.automatizer.adapter.repository.inmemory;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-import pl.kocjan.automatizer.domain.common.vavr.Error;
+import pl.kocjan.automatizer.domain.user.dto.UserDto;
 import pl.kocjan.automatizer.domain.user.port.UserRepository;
 
 public class InMemoryUserRepository implements UserRepository {
@@ -12,15 +14,23 @@ public class InMemoryUserRepository implements UserRepository {
 		this.users = new HashMap<>();
 	}
 	@Override
-	public Optional<Error> findByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<UserDto> findByEmail(String email) {
+		return users.entrySet()
+				.stream()
+				.filter(e -> e.getValue().getEmail().contains(email))
+				.map(e -> e.getValue())
+				.findFirst();
 	}
 
 	@Override
-	public Optional<Error> findByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<UserDto> findByUsername(String username) {
+		return Optional.ofNullable(users.get(username));
+	}
+	@Override
+	public String saveUser(UserDto userDto) {
+		String username = userDto.getUsername();
+		users.put(username, userDto);
+		return username;
 	}
 
 }
