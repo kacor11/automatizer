@@ -1,9 +1,0 @@
-hostGroup: DEFAULT
-tasks:
-  - name: name1
-    command: pwd
-    
-
-  - name: name2
-    command: ls
- 
